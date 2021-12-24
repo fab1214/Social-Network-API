@@ -42,10 +42,10 @@ const userController = {
     //request id, body to update
    updateUser({ params, body }, res){
        //pass in id, body
-       User.findOneAndUpdate({_id: params.id }, body, {new: true, runValidators: true })
+       User.findOneAndUpdate({ _id: params.id }, body, {new: true, runValidators: true })
        .then(dbUserData => {
            if(!dbUserData){
-               res.status(404).json({ message: 'No user with thie id found' });
+               res.status(404).json({ message: 'No user with this id found' });
                return;
            }
            res.json(dbUserData);
@@ -54,6 +54,23 @@ const userController = {
            console.log(err);
            res.json(400).json(err);
        });
+   },
+
+   //delete user
+   deleteUser({ params }, res){
+       User.findOneAndDelete({ _id: params.id })
+       .then(dbUserData => {
+        if(!dbUserData){
+            res.status(404).json({ message: 'No user with this id found' });
+            return;
+        }
+        res.json(dbUserData);
+    })
+    .catch(err => {
+        console.log(err);
+        res.json(400).json(err);
+    });
    }
 };
+
 module.exports = userController;
