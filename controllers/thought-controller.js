@@ -51,8 +51,10 @@ const thoughtController = {
 
     //add reaction
     addReaction({ params, body }, res){
+        //find thought by thoughtId...
         Thought.findOneAndUpdate(
             {_id: params.thoughtId},
+            //push newly created reaction into the reaction array in thought document
             { $push: { reactions: body }},
             { new: true }
         )
@@ -84,7 +86,7 @@ const thoughtController = {
             res.status(400).json(err);
         })
     },
-
+    // /api/thoughts/:thoughtId
     deleteThought({ params }, res){
         Thought.findOneAndDelete({_id: params.id }, {new: true, runValidators: true })
         .then(dbThoughtData => {
@@ -99,10 +101,12 @@ const thoughtController = {
             res.status(400).json(err);
         })
     },
-
+    // /api/thoguhts/:thoughtId/reactions/:reactionId
     deleteReaction({ params }, res){
+        //find thought by id...
         Thought.findOneAndUpdate(
             {_id: params.thoughtId },
+            //pull reactionId from reactions array in thought document
             { $pull: { reactions: { reactionId: params.reactionId }}},
             {new: true, runValidators: true })
         .then(dbThoughtData => {
