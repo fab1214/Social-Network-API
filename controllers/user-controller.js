@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Thought } = require('../models');
 //functions go here as methods
 const userController = {
     //findAll users query
