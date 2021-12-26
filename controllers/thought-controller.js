@@ -47,6 +47,26 @@ const thoughtController = {
         });
     },
 
+    //add reaction
+    addReaction({ params, body }, res){
+        Thought.findOneAndUpdate(
+            {_id: params.thoughtId},
+            { $push: { reactions: body }},
+            { new: true }
+        )
+        .then(dbThoughtData => {
+            if(!dbThoughtData){
+                res.status(404).json({ message: "no thought with this id found" });
+                return;
+            }
+            res.json(dbThoughtData);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).json(err);
+        })
+    },
+
     //update thought
     updateThought({params, body }, res){
         Thought.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
